@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { GoogleGenAI } from "@google/genai";
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Send, Bot, User, Sparkles, Loader2, Search } from 'lucide-react';
-
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+import { Send, Bot, User, Loader2 } from 'lucide-react';
 
 export const InteractiveMVP: React.FC = () => {
   const [input, setInput] = useState('');
@@ -21,16 +18,19 @@ export const InteractiveMVP: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: userMessage,
-        config: {
-          systemInstruction: "You are the ATSFY Core Intelligence Layer, the central AI brain of a multi-startup ecosystem. Your goal is to provide intelligent insights across Education, Knowledge Management, Hiring (ATSfy), Startup Validation (StartupLens), and Finance (Finance XAI). Be professional, technical, and visionary. Mention how different parts of the ecosystem can work together if relevant. Use Google Search grounding for up-to-date market data if asked about startups or trends.",
-          tools: [{ googleSearch: {} }]
-        }
+      const response = await fetch('/.netlify/functions/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMessage }),
       });
 
-      setMessages(prev => [...prev, { role: 'ai', content: response.text || "I'm processing that through our core intelligence layer..." }]);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Request failed');
+      }
+
+      setMessages(prev => [...prev, { role: 'ai', content: data.text || "I'm processing that through our core intelligence layer..." }]);
     } catch (error) {
       console.error("AI Error:", error);
       setMessages(prev => [...prev, { role: 'ai', content: "Connection to core intelligence layer interrupted. Please try again." }]);
@@ -56,7 +56,7 @@ export const InteractiveMVP: React.FC = () => {
         </div>
         <div className="flex gap-2">
           <div className="px-3 py-1 rounded-full bg-white/5 text-[10px] uppercase tracking-wider font-bold border border-white/10">
-            Search Grounding Active
+            AI Powered
           </div>
         </div>
       </div>
@@ -77,8 +77,8 @@ export const InteractiveMVP: React.FC = () => {
                   {msg.role === 'user' ? <User size={16} /> : <Bot size={16} />}
                 </div>
                 <div className={`p-4 rounded-2xl text-sm leading-relaxed ${
-                  msg.role === 'user' 
-                    ? 'bg-brand-secondary/10 border border-brand-secondary/20 text-white' 
+                  msg.role === 'user'
+                    ? 'bg-brand-secondary/10 border border-brand-secondary/20 text-white'
                     : 'bg-white/5 border border-white/10 text-white/90'
                 }`}>
                   {msg.content}
