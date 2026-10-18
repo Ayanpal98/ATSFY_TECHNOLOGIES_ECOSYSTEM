@@ -134,6 +134,16 @@ const App: React.FC = () => {
           </div>
         </section>
 
+        <section id="mvp" className="mvp-section section-space">
+          <div className="section-wrap">
+            <div className="mvp-heading">
+              <div><p className="section-kicker">INTERACTIVE PREVIEW</p><h2>Meet the <em>Core Intelligence</em> concept.</h2></div>
+              <p>Try the existing prototype below. It is an exploratory demo, not a substitute for professional advice or a guarantee of product availability.</p>
+            </div>
+            <InteractiveMVP />
+          </div>
+        </section>
+
         <section className="core-section section-space">
           <div className="section-wrap core-layout">
             <div className="core-copy">
