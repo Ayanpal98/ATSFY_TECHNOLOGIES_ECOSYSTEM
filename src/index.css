@@ -289,3 +289,20 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--gold); outline-
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+.mvp-section { background: #F7F6F2; }
+.mvp-heading { display: flex; justify-content: space-between; align-items: end; gap: 36px; margin-bottom: 36px; }
+.mvp-heading h2 { margin: 0; font: 700 clamp(34px, 4vw, 48px)/1.12 var(--display); letter-spacing: -.06em; color: var(--forest); }
+.mvp-heading h2 em { color: var(--sage); font-style: normal; }
+.mvp-heading > p { max-width: 390px; margin: 0 0 4px; color: var(--muted); font-size: 12px; line-height: 1.8; }
+.mvp-section .glass { background: white; border-color: rgba(28,48,31,.14); color: var(--forest); }
+.mvp-section .text-white\/50, .mvp-section .text-white\/40, .mvp-section .text-white\/30 { color: #657253; }
+.mvp-section input { background: #F7F6F2; border-color: rgba(28,48,31,.15); color: var(--forest); }
+.mvp-section input::placeholder { color: #8B9488; }
+.mvp-section .bg-white\/5 { background: rgba(28,48,31,.045); }
+.mvp-section .border-white\/10, .mvp-section .border-white\/20 { border-color: rgba(28,48,31,.12); }
+.mvp-section .text-white\/90, .mvp-section .text-white { color: var(--forest); }
+@media (max-width: 760px) {
+  .mvp-heading { display: block; }
+  .mvp-heading > p { margin-top: 16px; }
+}
