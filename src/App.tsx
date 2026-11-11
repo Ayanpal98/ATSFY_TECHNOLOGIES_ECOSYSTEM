@@ -61,7 +61,7 @@ const App: React.FC = () => {
             Intelligence<br/><span className="serif-italic text-[#657253]">with purpose.</span>
           </motion.h1>
           <div className="mt-10 grid max-w-5xl grid-cols-1 gap-8 md:mt-14 md:grid-cols-[1fr_auto] md:items-end">
-            <p className="max-w-[620px] text-lg leading-[1.65] text-[#52614e] md:text-[21px]">We build useful technology for the moments that matter — helping people learn, work, create, and move forward with greater clarity.</p>
+            <p className="max-w-[620px] text-lg leading-[1.65] text-[#52614e] md:text-[21px]">ATSFY Technologies is an independent AI and technology venture studio in Agartala, Tripura. We build practical digital products across learning, career intelligence, knowledge systems, and business — from Northeast India for wider markets.</p>
             <div className="flex flex-wrap gap-3">
               <a href="#ecosystem" className="rounded-full bg-[#1c301f] px-6 py-4 text-sm font-bold text-white transition hover:-translate-y-1 hover:bg-[#285040]">Explore our work <ArrowDown className="ml-3 inline" size={15}/></a>
               <a href="#contact" className="rounded-full border border-[#1c301f]/20 px-6 py-4 text-sm font-bold transition hover:-translate-y-1 hover:bg-white">Talk to ATSFY <ArrowUpRight className="ml-3 inline" size={15}/></a>
