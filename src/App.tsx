@@ -1,536 +1,171 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
-import { 
-  GraduationCap, 
-  BookOpen, 
-  Cpu, 
-  Rocket, 
-  TrendingUp, 
-  ChevronRight, 
-  Globe, 
-  ArrowUpRight,
-  Zap,
-  Shield,
-  Layers,
-  Linkedin,
-  Github
+import {
+  ArrowDown, ArrowRight, ArrowUpRight, BookOpen, Check, ChevronDown,
+  Cpu, GraduationCap, Layers3, Linkedin, Menu, Rocket, ShieldCheck,
+  Sparkles, TrendingUp, X, Globe2, Mail, Github, Leaf
 } from 'lucide-react';
 import { ECOSYSTEM_DATA } from './types';
-import { InteractiveMVP } from './components/InteractiveMVP';
+
+const icons: Record<string, React.ElementType> = {
+  GraduationCap, BookOpen, Cpu, Rocket, TrendingUp
+};
 
 const App: React.FC = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { scrollYProgress } = useScroll();
-  const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
-
-  const { scrollY } = useScroll();
-  const [isScrolled, setIsScrolled] = React.useState(false);
+  const progress = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
 
   useEffect(() => {
-    return scrollY.on("change", (latest) => {
-      setIsScrolled(latest > 50);
-    });
-  }, [scrollY]);
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const closeMenu = () => setMenuOpen(false);
+  const links = [['Ecosystem', '#ecosystem'], ['Approach', '#approach'], ['Principles', '#principles'], ['Founder', '#founder']];
 
   return (
-    <div className="min-h-screen grid-pattern relative overflow-x-hidden">
-      {/* Background Glows */}
-      <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-primary/10 blur-[120px] rounded-full pointer-events-none" />
-      <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-brand-secondary/10 blur-[120px] rounded-full pointer-events-none" />
+    <main className="min-h-screen overflow-hidden bg-[#f7f6f2] text-[#1c301f]">
+      <motion.div className="fixed left-0 top-0 z-[70] h-[2px] bg-[#d9a43b]" style={{ width: progress }} />
+      <div className="pointer-events-none fixed inset-0 z-0 opacity-[.24] grain" />
+      <header className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-[#f7f6f2]/90 shadow-[0_8px_40px_rgba(28,48,31,.08)] backdrop-blur-xl' : 'bg-transparent'}`}>
+        <nav className="mx-auto flex max-w-[1440px] items-center justify-between px-5 py-4 md:px-10 md:py-5">
+          <a href="#top" className="group flex items-center gap-3" aria-label="ATSFY home">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1c301f] text-[#d9a43b] shadow-lg shadow-[#1c301f]/15"><Layers3 size={21}/></span>
+            <span className="font-display text-[19px] font-bold tracking-[-.06em]">ATSFY<span className="text-[#657253]">.</span><span className="ml-1 text-[10px] font-semibold tracking-[.19em] text-[#657253]">TECHNOLOGIES</span></span>
+          </a>
+          <div className="hidden items-center gap-9 md:flex">
+            {links.map(([label, href]) => <a key={href} href={href} className="text-[13px] font-semibold text-[#52614e] transition hover:text-[#1c301f]">{label}</a>)}
+            <a href="#contact" className="rounded-full bg-[#1c301f] px-5 py-3 text-[12px] font-bold text-white transition hover:bg-[#285040]">Let's build together <ArrowUpRight className="ml-2 inline" size={14}/></a>
+          </div>
+          <button className="rounded-full border border-[#1c301f]/15 p-2 md:hidden" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle navigation">{menuOpen ? <X/> : <Menu/>}</button>
+        </nav>
+        {menuOpen && <div className="border-t border-[#1c301f]/10 bg-[#f7f6f2] px-6 py-5 md:hidden">{links.map(([label, href]) => <a key={href} href={href} onClick={closeMenu} className="block border-b border-[#1c301f]/10 py-3 text-sm font-semibold">{label}</a>)}<a href="#contact" onClick={closeMenu} className="mt-4 block rounded-xl bg-[#1c301f] p-3 text-center text-sm font-bold text-white">Let's build together</a></div>}
+      </header>
 
-      {/* Navigation */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        isScrolled 
-          ? "glass py-4 border-b border-white/10 shadow-2xl" 
-          : "bg-transparent py-6 border-b border-transparent"
-      }`}>
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center">
-              <Layers className="text-black w-5 h-5" />
-            </div>
-            <span className="font-display font-bold text-xl tracking-tight">ATSFY <span className="text-brand-primary">TECH</span></span>
-          </div>
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-white/60">
-            <a href="#ecosystem" className="hover:text-white transition-colors">Ecosystem</a>
-            <a href="#mvp" className="hover:text-white transition-colors">Core MVP</a>
-            <a href="#ethics" className="hover:text-white transition-colors">Ethics</a>
-            <a href="#founder" className="hover:text-white transition-colors">Founder</a>
-            <a href="#vision" className="hover:text-white transition-colors">Vision</a>
-            <button className="px-5 py-2 rounded-full bg-white text-black font-bold hover:bg-brand-primary transition-all">
-              Join Network
-            </button>
-          </div>
+      <section id="top" className="relative z-10 px-5 pb-24 pt-36 md:px-10 md:pb-36 md:pt-52">
+        <div className="absolute right-[-10%] top-24 -z-10 h-[620px] w-[620px] rounded-full border border-[#285040]/10 md:right-[2%]">
+          <div className="absolute inset-[9%] rounded-full border border-[#285040]/10"/>
+          <div className="absolute inset-[19%] rounded-full border border-[#285040]/10"/>
+          <div className="absolute left-[15%] top-[22%] h-3 w-3 rounded-full bg-[#d9a43b] shadow-[0_0_30px_#d9a43b]"/>
+          <div className="absolute bottom-[18%] right-[16%] h-2 w-2 rounded-full bg-[#657253]"/>
         </div>
-      </nav>
-
-      {/* Hero Section */}
-      <section className="relative pt-40 pb-20 px-6">
-        <motion.div 
-          style={{ opacity, scale }}
-          className="max-w-7xl mx-auto text-center"
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border-white/10 text-xs font-bold tracking-widest uppercase text-brand-primary mb-8"
-          >
-            <SparkleIcon className="w-4 h-4" />
-            Future AI Ecosystem
+        <div className="mx-auto max-w-[1440px]">
+          <motion.div initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7 }} className="mb-8 inline-flex items-center gap-2 rounded-full border border-[#285040]/15 bg-white/60 px-4 py-2 text-[10px] font-bold uppercase tracking-[.2em] text-[#52614e]">
+            <span className="h-2 w-2 rounded-full bg-[#d9a43b]"/> Building from Northeast India
           </motion.div>
-          
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="font-display text-5xl md:text-8xl font-bold tracking-tighter leading-[0.9] mb-8"
-          >
-            Building Interconnected <br />
-            <span className="gradient-text">AI Infrastructure</span>
+          <motion.h1 initial={{ opacity: 0, y: 26 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .08, duration: .8 }} className="max-w-[1050px] font-display text-[clamp(3.6rem,9.5vw,9.5rem)] font-medium leading-[.91] tracking-[-.085em]">
+            Intelligence<br/><span className="serif-italic text-[#657253]">with purpose.</span>
           </motion.h1>
-
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="max-w-2xl mx-auto text-lg md:text-xl text-white/50 leading-relaxed mb-12"
-          >
-            From talent readiness to financial growth — emerging from the Northeast for India and beyond. ATSFY is the parent firm powering the next generation of intelligence.
-          </motion.p>
-
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
-          >
-            <button className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-brand-primary text-black font-bold text-lg hover:scale-105 transition-transform flex items-center justify-center gap-2">
-              Explore Ecosystem <ChevronRight size={20} />
-            </button>
-            <button className="w-full sm:w-auto px-8 py-4 rounded-2xl glass border-white/10 font-bold text-lg hover:bg-white/5 transition-colors">
-              Read Whitepaper
-            </button>
-          </motion.div>
-        </motion.div>
-      </section>
-
-      {/* Value Proposition Section */}
-      <section id="value-prop" className="py-24 px-6 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="font-display text-4xl md:text-6xl font-bold tracking-tight mb-8">
-                The <span className="text-brand-primary">Interconnected</span> Advantage
-              </h2>
-              <p className="text-white/60 text-lg leading-relaxed mb-8">
-                ATSFY Technologies uniquely enables an AI ecosystem by bridging the gap between talent development and financial growth. We don't just build isolated tools; we build a continuous pipeline of intelligence.
-              </p>
-              <div className="space-y-6">
-                <div className="flex gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-brand-primary/10 flex items-center justify-center shrink-0">
-                    <Zap className="text-brand-primary" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-lg">Talent-to-Finance Pipeline</h4>
-                    <p className="text-white/40 text-sm">We nurture talent through Education AI, validate their innovations with StartupLens, and fuel their growth with Finance XAI.</p>
-                  </div>
-                </div>
-                <div className="flex gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-brand-secondary/10 flex items-center justify-center shrink-0">
-                    <Globe className="text-brand-secondary" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-lg">Regional Roots, Global Reach</h4>
-                    <p className="text-white/40 text-sm">Born in Northeast India, we leverage regional talent to build AI solutions that solve global challenges in hiring, learning, and finance.</p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="relative"
-            >
-              <div className="aspect-video rounded-3xl overflow-hidden glass border-white/10 p-1 flex items-center justify-center">
-                <div className="w-full h-full bg-black/40 rounded-[22px] flex items-center justify-center relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/20 to-brand-secondary/20 opacity-30" />
-                  <div className="text-center z-10">
-                    <div className="text-5xl font-bold font-display mb-2">Core Value</div>
-                    <div className="text-brand-primary font-mono tracking-widest uppercase text-xs">Propelling Ecosystem Growth</div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+          <div className="mt-10 grid max-w-5xl grid-cols-1 gap-8 md:mt-14 md:grid-cols-[1fr_auto] md:items-end">
+            <p className="max-w-[620px] text-lg leading-[1.65] text-[#52614e] md:text-[21px]">We build useful technology for the moments that matter — helping people learn, work, create, and move forward with greater clarity.</p>
+            <div className="flex flex-wrap gap-3">
+              <a href="#ecosystem" className="rounded-full bg-[#1c301f] px-6 py-4 text-sm font-bold text-white transition hover:-translate-y-1 hover:bg-[#285040]">Explore our work <ArrowDown className="ml-3 inline" size={15}/></a>
+              <a href="#contact" className="rounded-full border border-[#1c301f]/20 px-6 py-4 text-sm font-bold transition hover:-translate-y-1 hover:bg-white">Talk to ATSFY <ArrowUpRight className="ml-3 inline" size={15}/></a>
+            </div>
+          </div>
+          <div className="mt-24 flex flex-col justify-between gap-5 border-t border-[#1c301f]/15 pt-5 text-[10px] font-bold uppercase tracking-[.2em] text-[#657253] md:flex-row">
+            <span>Independent technology venture studio</span><span>Agartala, Tripura · India</span><span>Tripura → World</span>
           </div>
         </div>
       </section>
 
-      {/* Ecosystem Grid */}
-      <section id="ecosystem" className="py-24 px-6 relative">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-            <div>
-              <h2 className="font-display text-4xl md:text-6xl font-bold tracking-tight mb-4">The Ecosystem</h2>
-              <p className="text-white/40 max-w-md">Five specialized AI verticals interconnected by a single core intelligence layer.</p>
-            </div>
-            <div className="flex items-center gap-4 text-sm font-mono text-white/30">
-              <span className="flex items-center gap-1"><Globe size={14} /> Global Scale</span>
-              <span className="flex items-center gap-1"><Shield size={14} /> Secure Infra</span>
-            </div>
+      <section id="approach" className="relative z-10 bg-[#1c301f] px-5 py-24 text-[#f7f6f2] md:px-10 md:py-32">
+        <div className="mx-auto grid max-w-[1440px] gap-14 md:grid-cols-[.8fr_1.2fr] md:gap-24">
+          <div><p className="mb-5 text-[10px] font-bold uppercase tracking-[.25em] text-[#d9a43b]">01 / The idea</p><h2 className="font-display text-5xl leading-[1.02] tracking-[-.06em] md:text-7xl">One core.<br/><span className="serif-italic text-[#c5cdb8]">Many possibilities.</span></h2></div>
+          <div className="max-w-2xl self-end"><p className="text-xl leading-[1.65] text-white/75 md:text-2xl">ATSFY is building a connected portfolio of technology products and ventures, supported by shared thinking across product, engineering, AI, and operations.</p><p className="mt-7 max-w-xl text-sm leading-7 text-white/45">We focus on practical problems, responsible use of technology, and products that can grow from regional needs to wider markets. Each product has its own purpose; the shared ambition is to make technology more useful and accessible.</p></div>
+        </div>
+        <div className="mx-auto mt-20 grid max-w-[1440px] grid-cols-1 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-3">
+          {[
+            ['01','People first','Build around real human needs.'],
+            ['02','Explainable by design','Make decisions easier to understand.'],
+            ['03','Built to connect','Create products that work better together.']
+          ].map(([n,t,d])=><div key={n} className="bg-[#1c301f] p-7 md:p-9"><span className="text-xs text-[#d9a43b]">{n}</span><h3 className="mt-8 font-display text-2xl tracking-tight">{t}</h3><p className="mt-3 text-sm text-white/45">{d}</p></div>)}
+        </div>
+      </section>
+
+      <section id="ecosystem" className="relative z-10 px-5 py-24 md:px-10 md:py-32">
+        <div className="mx-auto max-w-[1440px]">
+          <div className="mb-14 flex flex-col justify-between gap-7 md:mb-20 md:flex-row md:items-end">
+            <div><p className="mb-5 text-[10px] font-bold uppercase tracking-[.25em] text-[#9a742b]">02 / The portfolio</p><h2 className="font-display text-5xl tracking-[-.07em] md:text-7xl">Ideas in motion<span className="text-[#d9a43b]">.</span></h2></div>
+            <p className="max-w-md text-base leading-7 text-[#657253]">A growing portfolio across learning, knowledge, careers, venture building, and financial intelligence.</p>
           </div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {ECOSYSTEM_DATA.map((item, i) => {
+              const Icon = icons[item.icon] || Cpu;
+              return <motion.article key={item.id} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .15 }} transition={{ delay: i * .06 }} className="group flex min-h-[360px] flex-col rounded-[22px] border border-[#1c301f]/10 bg-white/65 p-7 transition duration-300 hover:-translate-y-1 hover:border-[#657253]/40 hover:bg-white hover:shadow-[0_22px_70px_rgba(28,48,31,.09)] md:p-9">
+                <div className="flex items-start justify-between"><span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#e9ede4] text-[#285040]"><Icon size={22}/></span><span className="font-mono text-xs text-[#9aa18e]">0{i+1}</span></div>
+                <p className="mt-9 text-[10px] font-bold uppercase tracking-[.2em] text-[#9a742b]">{item.subtitle}</p>
+                <h3 className="mt-2 font-display text-3xl tracking-[-.05em]">{item.title}</h3>
+                <p className="mt-4 flex-1 text-sm leading-7 text-[#657253]">{item.description}</p>
+                <a href={item.url} target="_blank" rel="noopener noreferrer" className="mt-8 flex items-center justify-between border-t border-[#1c301f]/10 pt-5 text-xs font-bold"><span>Explore product</span><span className="flex h-9 w-9 items-center justify-center rounded-full border border-[#1c301f]/15 transition group-hover:border-[#1c301f] group-hover:bg-[#1c301f] group-hover:text-white"><ArrowUpRight size={16}/></span></a>
+              </motion.article>
+            })}
+          </div>
+          <p className="mt-6 text-[11px] leading-5 text-[#8b9383]">Portfolio links reflect the product destinations currently configured by ATSFY. Product availability and capabilities may vary by destination.</p>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {ECOSYSTEM_DATA.map((module, idx) => (
-              <motion.div
-                key={module.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="group p-8 rounded-3xl glass border-white/5 hover:border-white/20 transition-all relative overflow-hidden flex flex-col"
-              >
-                <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${module.color} opacity-5 blur-3xl group-hover:opacity-20 transition-opacity`} />
-                
-                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${module.color} p-[1px] mb-6`}>
-                  <div className="w-full h-full rounded-2xl bg-brand-dark flex items-center justify-center">
-                    <IconComponent name={module.icon} className="text-white w-6 h-6" />
-                  </div>
-                </div>
-
-                <h3 className="font-display text-2xl font-bold mb-1">{module.title}</h3>
-                <p className="text-xs font-bold tracking-widest uppercase text-white/30 mb-4">{module.subtitle}</p>
-                <p className="text-white/50 text-sm leading-relaxed mb-6">{module.description}</p>
-                
-                <div className="space-y-4 mb-8 flex-grow">
-                  <div>
-                    <h4 className="text-[10px] uppercase tracking-widest font-bold text-brand-primary mb-1">Main Function</h4>
-                    <p className="text-xs text-white/40">{module.mainFunction}</p>
-                  </div>
-                  <div>
-                    <h4 className="text-[10px] uppercase tracking-widest font-bold text-brand-secondary mb-1">Problem Solved</h4>
-                    <p className="text-xs text-white/40">{module.problemSolved}</p>
-                  </div>
-                  <div>
-                    <h4 className="text-[10px] uppercase tracking-widest font-bold text-white/60 mb-1">Target Users</h4>
-                    <p className="text-xs text-white/40">{module.targetUsers}</p>
-                  </div>
-                </div>                <a 
-                  href={module.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm font-bold group-hover:text-brand-primary transition-colors mt-auto"
-                >
-                  Learn More <ArrowUpRight size={16} />
-                </a>
-              </motion.div>
-            ))}
+      <section className="relative z-10 overflow-hidden bg-[#e9ede4] px-5 py-24 md:px-10 md:py-32">
+        <div className="mx-auto grid max-w-[1440px] items-center gap-12 md:grid-cols-[1fr_1fr]">
+          <div><p className="mb-5 text-[10px] font-bold uppercase tracking-[.25em] text-[#9a742b]">03 / The shared layer</p><h2 className="font-display text-5xl leading-[1.04] tracking-[-.07em] md:text-7xl">The work behind<br/><span className="serif-italic text-[#657253]">the products.</span></h2><p className="mt-8 max-w-lg text-base leading-8 text-[#52614e]">A consistent foundation for turning ideas into useful digital experiences — from early product thinking to engineering, deployment, and ongoing improvement.</p></div>
+          <div className="relative mx-auto aspect-square w-full max-w-[520px]">
+            <div className="absolute inset-[7%] rounded-full border border-[#285040]/15"/><div className="absolute inset-[20%] rounded-full border border-[#285040]/20"/><div className="absolute inset-[34%] rounded-full border border-[#285040]/25"/>
+            <div className="absolute inset-0 flex items-center justify-center"><div className="flex h-32 w-32 flex-col items-center justify-center rounded-full bg-[#1c301f] text-[#f7f6f2] shadow-2xl"><Layers3 size={28} className="mb-2 text-[#d9a43b]"/><span className="text-[10px] font-bold uppercase tracking-[.18em]">ATSFY Core</span></div></div>
+            {[
+              ['AI & research','top-[2%] left-1/2 -translate-x-1/2'],
+              ['Engineering','right-[-1%] top-1/2 -translate-y-1/2'],
+              ['Product design','bottom-[2%] left-1/2 -translate-x-1/2'],
+              ['Operations','left-[-1%] top-1/2 -translate-y-1/2']
+            ].map(([label,pos])=><div key={label} className={`absolute ${pos} rounded-full border border-[#285040]/15 bg-[#f7f6f2] px-4 py-3 text-[10px] font-bold uppercase tracking-[.12em] text-[#52614e] shadow-sm`}>{label}</div>)}
+            <div className="absolute left-[17%] top-[18%] h-2 w-2 rounded-full bg-[#d9a43b]"/><div className="absolute bottom-[20%] right-[16%] h-2 w-2 rounded-full bg-[#657253]"/>
           </div>
         </div>
       </section>
 
-      {/* MVP Section */}
-      <section id="mvp" className="py-24 px-6 bg-white/[0.02]">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-4xl md:text-6xl font-bold tracking-tight mb-4">Core Intelligence</h2>
-            <p className="text-white/40 max-w-2xl mx-auto">Experience the introductory MVP of our interconnected brain. This layer powers every startup in the ATSFY ecosystem.</p>
-          </div>
-          <InteractiveMVP />
-        </div>
-      </section>
-
-      {/* Future Vision Section */}
-      <section id="future-vision" className="py-24 px-6 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="font-display text-4xl md:text-7xl font-bold tracking-tight mb-8">
-              Future <span className="gradient-text">Vision</span>
-            </h2>
-
-            <div className="max-w-4xl mx-auto mb-16 p-8 md:p-12 rounded-[40px] bg-white/5 border border-white/10 relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/5 to-brand-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <p className="relative z-10 text-brand-primary font-mono text-xs tracking-[0.3em] uppercase font-bold mb-6">Mission Statement</p>
-              <h3 className="relative z-10 text-2xl md:text-4xl font-display font-bold leading-tight tracking-tight">
-                To build an interconnected AI infrastructure that empowers global talent and drives innovation, rooted in the unique potential of Northeast India.
-              </h3>
-            </div>
-
-            <p className="max-w-3xl mx-auto text-lg md:text-xl text-white/60 leading-relaxed mb-16">
-              Our long-term aspiration is to redefine how AI ecosystems are built globally. Starting from the Northeast of India, we are creating a blueprint for decentralized, high-impact innovation that scales across borders.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-8 rounded-3xl glass border-white/5">
-              <div className="w-12 h-12 rounded-xl bg-brand-primary/10 flex items-center justify-center mx-auto mb-6">
-                <Globe className="text-brand-primary" />
-              </div>
-              <h4 className="font-bold text-xl mb-4">Global Impact</h4>
-              <p className="text-white/40 text-sm">Exporting Northeast India's unique problem-solving perspective to global markets, creating AI that is both culturally nuanced and technically superior.</p>
-            </div>
-            <div className="p-8 rounded-3xl glass border-white/5">
-              <div className="w-12 h-12 rounded-xl bg-brand-secondary/10 flex items-center justify-center mx-auto mb-6">
-                <Cpu className="text-brand-secondary" />
-              </div>
-              <h4 className="font-bold text-xl mb-4">Autonomous Growth</h4>
-              <p className="text-white/40 text-sm">Developing self-evolving AI models that learn from the ecosystem's own data to continuously improve hiring, learning, and financial outcomes.</p>
-            </div>
-            <div className="p-8 rounded-3xl glass border-white/5">
-              <div className="w-12 h-12 rounded-xl bg-purple-400/10 flex items-center justify-center mx-auto mb-6">
-                <Layers className="text-purple-400" />
-              </div>
-              <h4 className="font-bold text-xl mb-4">Unified Intelligence</h4>
-              <p className="text-white/40 text-sm">A future where every individual and startup has access to a personal AI 'Core' that manages their entire professional and financial lifecycle.</p>
+      <section id="principles" className="relative z-10 px-5 py-24 md:px-10 md:py-32">
+        <div className="mx-auto max-w-[1440px]">
+          <p className="mb-5 text-[10px] font-bold uppercase tracking-[.25em] text-[#9a742b]">04 / Principles</p>
+          <div className="grid gap-12 md:grid-cols-[.8fr_1.2fr]"><h2 className="font-display text-5xl tracking-[-.07em] md:text-7xl">Progress,<br/><span className="serif-italic text-[#657253]">with principles.</span></h2>
+            <div className="divide-y divide-[#1c301f]/10">
+              {[
+                [ShieldCheck,'Responsible AI','We value explainability, human oversight, privacy, and fairness in the way technology is designed and used.'],
+                [Globe2,'Access for more people','Products should account for different languages, contexts, devices, and levels of connectivity.'],
+                [Leaf,'Long-term thinking','We aim to build with care, learn from real use, and grow in a way that creates lasting value.']
+              ].map(([Icon,title,desc]: any)=><div key={title} className="grid gap-4 py-7 sm:grid-cols-[50px_1fr]"><span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#e9ede4] text-[#285040]"><Icon size={20}/></span><div><h3 className="font-display text-2xl tracking-tight">{title}</h3><p className="mt-2 max-w-xl text-sm leading-7 text-[#657253]">{desc}</p></div></div>)}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Ethical AI Section */}
-      <section id="ethics" className="py-24 px-6 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-400/10 border border-emerald-400/20 text-[10px] font-bold tracking-widest uppercase text-emerald-400 mb-8">
-                <Shield className="w-3 h-3" /> Responsible AI
-              </div>
-              <h2 className="font-display text-4xl md:text-6xl font-bold tracking-tight mb-8">
-                Ethics by <span className="text-emerald-400">Design</span>
-              </h2>
-              <p className="text-white/60 text-lg leading-relaxed mb-8">
-                At ATSFY Technologies, we believe that the power of AI comes with a profound responsibility. Our commitment to ethical development is woven into the very fabric of our infrastructure.
-              </p>
-              
-              <div className="space-y-8">
-                <div className="flex gap-6">
-                  <div className="w-12 h-12 rounded-2xl bg-emerald-400/10 flex items-center justify-center shrink-0">
-                    <Shield className="text-emerald-400" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-xl mb-2">Data Privacy First</h4>
-                    <p className="text-white/40 text-sm">We implement industry-leading encryption and decentralized data storage protocols to ensure that user information remains private and secure at all times.</p>
-                  </div>
-                </div>
-                <div className="flex gap-6">
-                  <div className="w-12 h-12 rounded-2xl bg-cyan-400/10 flex items-center justify-center shrink-0">
-                    <Zap className="text-cyan-400" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-xl mb-2">Bias Mitigation</h4>
-                    <p className="text-white/40 text-sm">Our models undergo rigorous testing and continuous auditing to identify and eliminate algorithmic biases, ensuring fair outcomes for all users across our ecosystem.</p>
-                  </div>
-                </div>
-                <div className="flex gap-6">
-                  <div className="w-12 h-12 rounded-2xl bg-brand-primary/10 flex items-center justify-center shrink-0">
-                    <Layers className="text-brand-primary" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-xl mb-2">Radical Transparency</h4>
-                    <p className="text-white/40 text-sm">Through our Explainable AI (XAI) initiatives, we provide clear insights into how our models make decisions, fostering trust and accountability.</p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="relative"
-            >
-              <div className="aspect-square rounded-[40px] glass border-white/10 p-12 flex items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/10 to-transparent opacity-30" />
-                <div className="relative z-10 text-center">
-                  <div className="w-24 h-24 rounded-3xl bg-emerald-400/20 flex items-center justify-center mx-auto mb-8 animate-pulse">
-                    <Shield className="w-12 h-12 text-emerald-400" />
-                  </div>
-                  <div className="text-3xl font-display font-bold mb-4">Trust Infrastructure</div>
-                  <p className="text-white/40 text-sm max-w-xs mx-auto">Building the world's most trusted AI ecosystem through rigorous ethical standards and transparent development.</p>
-                </div>
-                
-                {/* Decorative elements */}
-                <div className="absolute top-10 left-10 w-20 h-20 border border-emerald-400/20 rounded-full blur-xl" />
-                <div className="absolute bottom-10 right-10 w-32 h-32 border border-cyan-400/20 rounded-full blur-2xl" />
-              </div>
-            </motion.div>
+      <section id="founder" className="relative z-10 bg-[#285040] px-5 py-24 text-[#f7f6f2] md:px-10 md:py-32">
+        <div className="mx-auto grid max-w-[1440px] gap-12 md:grid-cols-[.65fr_1.35fr] md:items-center md:gap-24">
+          <div className="relative mx-auto flex aspect-[4/5] w-full max-w-[340px] items-center justify-center overflow-hidden rounded-[180px_180px_24px_24px] border border-white/20 bg-[#1c301f]">
+            <div className="absolute inset-0 founder-lines opacity-40"/><span className="relative font-display text-[100px] font-medium tracking-[-.1em] text-[#d9a43b]">AP</span><span className="absolute bottom-7 text-[9px] font-bold uppercase tracking-[.25em] text-white/50">Founder · ATSFY</span>
           </div>
+          <div><p className="mb-5 text-[10px] font-bold uppercase tracking-[.25em] text-[#d9a43b]">05 / The founder</p><h2 className="font-display text-5xl tracking-[-.07em] md:text-7xl">Built from<br/><span className="serif-italic text-[#d7dfd1]">where we stand.</span></h2><p className="mt-8 max-w-2xl text-lg leading-8 text-white/70">Founded by Ayan Pal, ATSFY carries a belief that world-class technology can be built from anywhere. Rooted in Tripura, the ambition is to create products that are grounded in real needs and ready to reach the world.</p><div className="mt-9 flex flex-wrap gap-3"><a href="https://www.linkedin.com/in/atsfy/" target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/25 px-5 py-3 text-xs font-bold transition hover:bg-white hover:text-[#1c301f]"><Linkedin className="mr-2 inline" size={15}/> Connect on LinkedIn</a><a href="https://github.com/Ayanpal98" target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/25 px-5 py-3 text-xs font-bold transition hover:bg-white hover:text-[#1c301f]"><Github className="mr-2 inline" size={15}/> GitHub</a></div></div>
         </div>
       </section>
 
-      {/* Founder Section */}
-      <section id="founder" className="py-24 px-6 relative overflow-hidden bg-white/[0.01]">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="relative order-2 lg:order-1"
-            >
-              <div className="aspect-[4/5] md:aspect-square rounded-[40px] overflow-hidden glass border-white/10 relative group">
-                <img 
-                  src="https://picsum.photos/seed/ayanpal/800/1000" 
-                  alt="Ayan Pal" 
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-transparent to-transparent opacity-60" />
-                <div className="absolute bottom-8 left-8 right-8">
-                  <p className="text-brand-primary font-mono text-xs tracking-widest uppercase font-bold mb-2">Founder & Managing Partner</p>
-                  <h3 className="text-3xl font-display font-bold">Ayan Pal</h3>
-                </div>
-              </div>
-              
-              {/* Decorative elements */}
-              <div className="absolute -top-6 -left-6 w-24 h-24 bg-brand-primary/20 blur-3xl rounded-full" />
-              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-brand-secondary/20 blur-3xl rounded-full" />
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="order-1 lg:order-2"
-            >
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-primary/10 border border-brand-primary/20 text-[10px] font-bold tracking-widest uppercase text-brand-primary mb-8">
-                <SparkleIcon className="w-3 h-3" /> Leadership
-              </div>
-              <h2 className="font-display text-4xl md:text-6xl font-bold tracking-tight mb-8">
-                Rooted in <span className="gradient-text">Truth</span>
-              </h2>
-              <div className="space-y-6">
-                <p className="text-white/80 text-xl font-medium leading-relaxed italic">
-                  "Hardcore farmer turned tech founder. Building ATSfy — a transparent, merit‑first hiring system as honest and visible as a field in daylight."
-                </p>
-                <div className="h-px w-20 bg-brand-primary/30" />
-                <p className="text-white/50 text-lg leading-relaxed">
-                  Ayan's journey from the fields to the forefront of AI innovation defines the ethos of ATSFY Technologies. His perspective ensures that our technology remains grounded, practical, and focused on real-world impact.
-                </p>
-                <div className="flex items-center gap-4 pt-4">
-                  <a href="https://www.linkedin.com/in/atsfy/" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full glass border-white/10 flex items-center justify-center hover:bg-brand-primary hover:text-black transition-all">
-                    <Linkedin size={20} />
-                  </a>
-                  <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full glass border-white/10 flex items-center justify-center hover:bg-brand-primary hover:text-black transition-all">
-                    <Github size={20} />
-                  </a>
-                </div>
-              </div>
-            </motion.div>
-          </div>
+      <section id="contact" className="relative z-10 px-5 py-24 md:px-10 md:py-32">
+        <div className="mx-auto max-w-[1440px] rounded-[28px] bg-[#d9a43b] px-7 py-14 md:px-16 md:py-20">
+          <p className="mb-5 text-[10px] font-bold uppercase tracking-[.25em] text-[#1c301f]/65">06 / Start a conversation</p>
+          <div className="grid gap-10 md:grid-cols-[1fr_auto] md:items-end"><div><h2 className="max-w-3xl font-display text-5xl leading-[1] tracking-[-.07em] md:text-7xl">Have a meaningful<br/>problem to solve?</h2><p className="mt-6 max-w-xl text-base leading-7 text-[#1c301f]/70">We'd like to hear what you're building, what needs to work better, or where technology could help.</p></div><a href="mailto:info@atsfy.tech?subject=Let's%20build%20together" className="inline-flex items-center justify-center rounded-full bg-[#1c301f] px-7 py-5 text-sm font-bold text-white transition hover:-translate-y-1 hover:bg-[#285040]">Email ATSFY <ArrowUpRight className="ml-4" size={17}/></a></div>
         </div>
       </section>
 
-      {/* Vision Section */}
-      <section id="vision" className="py-24 px-6">
-        <div className="max-w-7xl mx-auto glass rounded-[40px] p-8 md:p-20 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-brand-primary/5 to-brand-secondary/5 pointer-events-none" />
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
-            <div>
-              <div className="w-12 h-12 rounded-2xl bg-brand-primary/20 flex items-center justify-center mb-8">
-                <Zap className="text-brand-primary" />
-              </div>
-              <h2 className="font-display text-4xl md:text-6xl font-bold tracking-tight mb-8">From Northeast India <br />to the World.</h2>
-              <p className="text-white/60 text-lg leading-relaxed mb-8">
-                ATSFY Technologies isn't just building apps; we're building the foundational layer for an AI-first future. By focusing on talent readiness and financial reasoning, we're ensuring that the benefits of AI are accessible and actionable for everyone.
-              </p>
-              <div className="flex items-center gap-6">
-                <div>
-                  <p className="text-3xl font-bold font-display">5+</p>
-                  <p className="text-xs uppercase tracking-widest text-white/30 font-bold">Startups</p>
-                </div>
-                <div className="w-px h-10 bg-white/10" />
-                <div>
-                  <p className="text-3xl font-bold font-display">100%</p>
-                  <p className="text-xs uppercase tracking-widest text-white/30 font-bold">AI Driven</p>
-                </div>
-              </div>
-            </div>
-            <div className="relative">
-              <div className="aspect-square rounded-3xl overflow-hidden glass border-white/10 p-8 flex items-center justify-center">
-                <div className="relative w-full h-full">
-                  {/* Abstract Visual Representation of Interconnectedness */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-32 h-32 rounded-full bg-brand-primary/20 blur-2xl animate-pulse" />
-                    <Cpu className="w-24 h-24 text-brand-primary relative z-10" />
-                  </div>
-                  {[0, 72, 144, 216, 288].map((deg, i) => (
-                    <motion.div
-                      key={i}
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                      className="absolute inset-0"
-                      style={{ transform: `rotate(${deg}deg)` }}
-                    >
-                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-12 rounded-xl glass border-white/20 flex items-center justify-center">
-                        {i === 0 && <GraduationCap size={20} />}
-                        {i === 1 && <BookOpen size={20} />}
-                        {i === 2 && <Rocket size={20} />}
-                        {i === 3 && <TrendingUp size={20} />}
-                        {i === 4 && <Shield size={20} />}
-                      </div>
-                    </motion.div>
-                  ))}
-                  <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20">
-                    <circle cx="50%" cy="50%" r="35%" fill="none" stroke="white" strokeWidth="1" strokeDasharray="4 4" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="py-12 px-6 border-t border-white/5">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-brand-primary rounded flex items-center justify-center">
-              <Layers className="text-black w-4 h-4" />
-            </div>
-            <span className="font-display font-bold text-lg">ATSFY TECH</span>
-          </div>
-          <p className="text-white/20 text-sm">© 2026 ATSFY Technologies. All rights reserved.</p>
-          <div className="flex gap-6 text-white/40 hover:text-white transition-colors text-sm">
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">Twitter</a>
-            <a href="https://www.linkedin.com/in/atsfy/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-            <a href="https://github.com/" target="_blank" rel="noopener noreferrer">GitHub</a>
-          </div>
+      <footer className="relative z-10 border-t border-[#1c301f]/10 px-5 py-8 md:px-10">
+        <div className="mx-auto flex max-w-[1440px] flex-col justify-between gap-5 text-xs text-[#657253] md:flex-row md:items-center">
+          <a href="#top" className="font-display text-lg font-bold tracking-[-.06em] text-[#1c301f]">ATSFY<span className="text-[#d9a43b]">.</span></a>
+          <p>© {new Date().getFullYear()} ATSFY Technologies. Built from Tripura, India.</p>
+          <div className="flex gap-5"><a href="mailto:info@atsfy.tech" className="hover:text-[#1c301f]">Contact</a><a href="https://www.linkedin.com/in/atsfy/" target="_blank" rel="noopener noreferrer" className="hover:text-[#1c301f]">LinkedIn</a><a href="https://github.com/Ayanpal98" target="_blank" rel="noopener noreferrer" className="hover:text-[#1c301f]">GitHub</a></div>
         </div>
       </footer>
-    </div>
+    </main>
   );
 };
-
-const IconComponent = ({ name, className }: { name: string, className?: string }) => {
-  switch (name) {
-    case 'GraduationCap': return <GraduationCap className={className} />;
-    case 'BookOpen': return <BookOpen className={className} />;
-    case 'Cpu': return <Cpu className={className} />;
-    case 'Rocket': return <Rocket className={className} />;
-    case 'TrendingUp': return <TrendingUp className={className} />;
-    default: return <Cpu className={className} />;
-  }
-};
-
-const SparkleIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
-    <path d="M5 3v4" /><path d="M3 5h4" /><path d="M21 17v4" /><path d="M19 19h4" />
-  </svg>
-);
 
 export default App;
