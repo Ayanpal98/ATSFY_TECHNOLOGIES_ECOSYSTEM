@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1c301f"/><stop offset="1" stop-color="#285040"/></linearGradient>
+    <radialGradient id="glow"><stop offset="0" stop-color="#657253" stop-opacity=".55"/><stop offset="1" stop-color="#1c301f" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="950" cy="180" r="380" fill="url(#glow)"/>
+  <g fill="none" stroke="#d9a43b" stroke-opacity=".28"><circle cx="960" cy="315" r="250"/><circle cx="960" cy="315" r="190"/><circle cx="960" cy="315" r="130"/></g>
+  <circle cx="780" cy="145" r="7" fill="#d9a43b"/>
+  <rect x="78" y="78" width="68" height="68" rx="17" fill="#f7f6f2"/>
+  <path d="M96 125V99h8l18 17V99h8v26h-8l-18-17v17z" fill="#1c301f"/>
+  <text x="170" y="124" fill="#f7f6f2" font-family="Arial,sans-serif" font-size="29" font-weight="700" letter-spacing="3">ATSFY TECHNOLOGIES</text>
+  <text x="78" y="310" fill="#f7f6f2" font-family="Arial,sans-serif" font-size="78" font-weight="700" letter-spacing="-3">Intelligence</text>
+  <text x="78" y="400" fill="#d9a43b" font-family="Georgia,serif" font-size="82" font-style="italic">with purpose.</text>
+  <text x="82" y="475" fill="#e3e9df" font-family="Arial,sans-serif" font-size="26">Independent technology venture studio</text>
+  <text x="82" y="525" fill="#c5cdb8" font-family="Arial,sans-serif" font-size="21" letter-spacing="2">AGARTALA, TRIPURA · INDIA</text>
+</svg>
