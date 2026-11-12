@@ -647,3 +647,44 @@ Every indexable page needs:
 - Editing external business listings or social profiles
 - Making new performance, revenue, customer, funding, impact or regulatory claims
 - Creating location pages implying offices or delivered projects that have not been verified
+
+
+## 9. Repository implementation audit — verified source observations
+
+The following observations come from the current `main` branch source inspected on 12 November 2026. They are not live-production tests.
+
+### Current application structure
+
+- `src/main.tsx` mounts a single React `<App />` component.
+- `src/App.tsx` implements the current one-page experience with anchor navigation for Ecosystem, Approach, Principles, Founder and Contact.
+- The inspected `package.json` does not list React Router or another routing library.
+- The current stack includes React 19, Vite 6, TypeScript, Tailwind CSS 4 and Motion.
+- `src/types.ts` contains five portfolio entries.
+- Existing CSS includes a reduced-motion media query.
+- The current `index.html` includes a descriptive title, meta description, canonical homepage URL, robots directives, Open Graph/Twitter metadata, and Organization + WebSite JSON-LD.
+- `public/robots.txt` allows all user agents and references the sitemap.
+- `public/sitemap.xml` currently lists only the homepage.
+- `public/llms.txt` and `public/atsfy-knowledge.md` currently describe the five portfolio items but do not include the founder-approved product status labels or the full approved sellable service list.
+
+### Consequences for implementation
+
+1. Do not simply add anchor sections and assume that creates indexable service pages. The approved architecture requires real route-level pages with distinct HTML titles, descriptions, canonicals and content.
+2. Before selecting a routing implementation, inspect the hosting configuration and current Vite build/deploy behavior. The production output must support direct requests and refreshes on every route.
+3. Prefer prerendered/static HTML for each SEO landing page, or an appropriate SSR/SSG approach, so important page content and metadata are present in the initial response. Client-side title changes alone are not the preferred implementation for this multi-page SEO objective.
+4. No router dependency should be introduced until the existing build/deployment constraints are reviewed. Preserve the existing single-page homepage and its anchors.
+5. Use the approved product status labels consistently in the homepage portfolio, `llms.txt`, knowledge reference and any product directory.
+6. Do not publish the exact Agartala street address, opening hours, map coordinates or a LocalBusiness schema until verified and approved. Organization-level location wording can use Agartala, Tripura.
+7. The existing homepage's `areaServed` is India. Do not expand this to all Northeast states as a factual service-coverage claim without confirming actual coverage.
+8. The current `lastmod` in the sitemap is 2026-11-11. When adding routes, set each page's lastmod only when its content is actually changed.
+
+### Verification boundary
+
+This review fetched repository files from GitHub. It did not run a local install, TypeScript check, production build, browser test, Lighthouse test, link crawler or schema validator. No claim is made that the proposed routes or a preview deployment have been tested.
+
+## 10. Draft readiness and approval gates
+
+**Prepared for founder review:** nine route-level content drafts (six service pages and three location pages), homepage positioning, portfolio status copy, editorial claim audit and technical implementation specification.
+
+**Not performed:** application code changes, dependency changes, production branch changes, pull request creation, merge, deployment, DNS changes, Search Console changes, Bing Webmaster Tools changes, public listing edits or content publication.
+
+**Next authorized step after review:** implement the approved route/page architecture on a non-production branch, preserve the existing homepage, run build and regression checks, and present a preview for review. Production publication remains blocked until the founder gives separate explicit approval.
